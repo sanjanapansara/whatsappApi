@@ -30,6 +30,7 @@ import {
   DatabaseOutlined,
   CheckCircleOutlined,
   PoweroffOutlined,
+  MinusOutlined,
   MoreOutlined,
   CopyOutlined,
   DeleteOutlined,
@@ -48,7 +49,9 @@ import countryCodes from "country-codes-list";
 
 import { useNavigate } from "react-router-dom";
 import { t } from "i18next";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getMediaPath } from "../../lib";
+
 // import { Search } from "@ant-design/pro-components";
 const { Search, TextArea } = Input;
 
@@ -60,12 +63,24 @@ const WebInstance = ({ isLogin }) => {
 
   console.log("isLogin", isLogin);
   const [formTrial] = Form.useForm(); // Initialize form instance
-
+  const currency = useSelector((state) => state?.setting?.currency);
+  const panel = useSelector((state) => state?.setting?.panel);
   const navigate = useNavigate();
+  const [plan, setPlan] = useState('1 Month');
+  const [quantity, setQuantity] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState('Razor Pay');
+  const pricePerInstance = 1490;
+  const handlingChargeRate = 0.02;
+  const subtotal = pricePerInstance * quantity;
+  const handlingCharge = subtotal * handlingChargeRate;
+  const total = subtotal + handlingCharge;
+
   const [countryList, setCountryList] = useState([]);
 
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [isModalOpen3, setIsModalOpen3] = useState(false);
+  const [isModalOpen4, setIsModalOpen4] = useState(false);
+
   const [statusFilter, setStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("create_at");
@@ -74,13 +89,15 @@ const WebInstance = ({ isLogin }) => {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [selectedPaymentGateway, setSelectedPaymentGateway] = useState(null);
+
   const [country, setCountry] = useState("all");
   const [status, setStatus] = useState("all");
   const [renew, setRenew] = useState("all");
   const [isApplyFilter, setIsApplyFilter] = useState(false);
   //pagination
   const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
+  const [total1, setTotal1] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
   useEffect(() => {
@@ -111,6 +128,36 @@ const WebInstance = ({ isLogin }) => {
   const handleOk3 = () => {
     setIsModalOpen3(false);
   };
+
+  const showModal4 = () => {
+    setIsModalOpen4(true);
+  };
+
+  const handleCancel4 = () => {
+    setIsModalOpen4(false);
+  };
+
+  const handleOk4 = () => {
+    setIsModalOpen4(false);
+  };
+
+  const paymentGateways = useMemo(() => {
+    const currencyData = panel?.currencies?.find((cur) => cur?.code === currency);
+    if (currencyData) {
+      return currencyData?.paymentGateways;
+    } else {
+      return [];
+    }
+  }, [panel, currency]);
+
+
+  useEffect(() => {
+    if (paymentGateways.length > 0) {
+      setSelectedPaymentGateway(paymentGateways[0]);
+    } else {
+      setSelectedPaymentGateway(null);
+    }
+  }, [panel, currency, paymentGateways]);
 
   const resetFilterParameters = () => {
     setSearch("");
@@ -210,19 +257,58 @@ const WebInstance = ({ isLogin }) => {
   //   },
   // ];
 
-  const dataSource = Array.from({
-    length: 100,
-  }).map((_, i) => ({
-    key: i,
-    name: "Abc",
-    instancesstatus: "-",
-    sn: i + 1,
-    id: "3D9065C1223090EC9BDE0A...",
-    token: "01D6D6F43E7BAAE7FBE28190",
-    status: "Disconnected",
-    activeat: "20-10-25",
-    expireat: "25-10-25",
-  }));
+  // const dataSource = Array.from({
+  //   length: 100,
+  // }).map((_, i) => ({
+  //   key: i,
+  //   name: "Abc",
+  //   instancesstatus: "-",
+  //   sn: i + 1,
+  //   id: "3D9065C1223090EC9BDE0A...",
+  //   token: "01D6D6F43E7BAAE7FBE28190",
+  //   status: "Disconnected",
+  //   activeat: "20-10-25",
+  //   expireat: "25-10-25",
+  // }));
+
+  const additionalData = [
+    {
+      key: "1",
+      name: "01D6D6F43E7BAAE7FBE28190",
+      type: "Pagar.Me",
+      instancesstatus: "3D9065C1223090EC9BDE0A...",
+      token: "01D6D6F43E7BAAE7FBE28190",
+      status: "",
+      id: "3D9065C1223090EC9BDE0A",
+      activeat: "20-10-25",
+      expireat: "25-10-25",
+    },
+    {
+      key: "2",
+      name: "My number",
+      type: "Pagar.Me",
+      id: "3D9061EA825EF0EC4B950A...",
+      token: "76122851D206B4880B20D76B",
+      status: "Disconnected",
+      dueDate: "02/12/2024",
+      payment: "Trial",
+    },
+  ];
+
+  const dataSource = [
+    ...Array.from({ length: 100 }).map((_, i) => ({
+      key: i,
+      name: "Abc",
+      instancesstatus: "-",
+      sn: i + 1,
+      id: "3D9065C1223090EC9BDE0A...",
+      token: "01D6D6F43E7BAAE7FBE28190",
+      status: "Disconnected",
+      activeat: "20-10-25",
+      expireat: "25-10-25",
+    })),
+    ...additionalData,
+  ];
 
   const isFilterApply = useMemo(() => {
     // return (
@@ -321,7 +407,6 @@ const WebInstance = ({ isLogin }) => {
             <Text
               onClick={(e) => {
                 e.stopPropagation(); // Stop row click event
-                navigate("/webpayment-list");
               }}
             >
               <Space>
@@ -488,18 +573,20 @@ const WebInstance = ({ isLogin }) => {
             >
               <Flex gap="small" justify="space-evenly">
                 <Button
-                  type={statusFilter == "claim trial" ? "primary" : "default"}
-                  onClick={() => setStatusFilter("available")}
-                  block
+                  onClick={() => {
+                    resetFilterParameters();
+                  }}
                 >
-                  {t("Claim trial")}
+                  <RedoOutlined /> {t("Claim trial")}
                 </Button>
                 <Button
-                  type={statusFilter == "add" ? "primary" : "default"}
-                  onClick={() => setStatusFilter("active")}
-                  block
+                  onClick={() => {
+                    resetFilterParameters();
+                    showModal4();
+
+                  }}
                 >
-                  {t("Add")}
+                  <PlusOutlined /> {t("Add")}
                 </Button>
                 {/* <Button
                   type={statusFilter == "expired" ? "primary" : "default"}
@@ -790,6 +877,124 @@ const WebInstance = ({ isLogin }) => {
             </Select>
           </Form.Item>
         </Form>
+      </Modal>
+
+      <Modal
+        title=""
+        open={isModalOpen4}
+        onOk={handleOk4}
+        onCancel={handleCancel4}
+        okText="Confirm"
+        cancelText="Cancel"
+        centered
+        width={500}
+        footer={[
+          <Button key="back" onClick={handleCancel4}>
+            Cancel
+          </Button>,
+        ]}
+      >
+        <Title level={4}>Buy Web Instance</Title>
+
+        <Row gutter={[8, 8]}>
+          <Col span={24}>
+            <Text strong>Choose Plan</Text>
+          </Col>
+          <Col span={24}>
+            <Radio.Group value={plan} onChange={(e) => setPlan(e.target.value)}>
+              <Space>
+                <Radio.Button value="1 Month">1 Month</Radio.Button>
+                <Radio.Button value="3 Months">3 Months</Radio.Button>
+                <Radio.Button value="6 Months">6 Months</Radio.Button>
+                <Radio.Button value="1 Year">1 Year</Radio.Button>
+              </Space>
+            </Radio.Group>
+          </Col>
+        </Row>
+
+        <Row gutter={[8, 8]} style={{ marginTop: 16 }}>
+          <Col span={16}>
+            <Text strong>Instance Name</Text>
+            <Input placeholder="Enter Instance Name" style={{ marginTop: 4 }} />
+          </Col>
+          <Col span={8}>
+            <Text strong>Quantity</Text>
+            <Row justify="center" align="middle" style={{ marginTop: 4 }}>
+              <Button
+                icon={<MinusOutlined />}
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              />
+              <Text style={{ margin: "0 8px" }}>{quantity}</Text>
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => setQuantity(quantity + 1)}
+              />
+            </Row>
+          </Col>
+        </Row>
+
+        <Row gutter={[8, 8]} style={{ marginTop: 16 }}>
+          <Col span={24}>
+            <Text strong>Payment Method</Text>
+          </Col>
+          <Col span={24}>
+            <Radio.Group
+              value={paymentMethod}
+              onChange={(e) => setPaymentMethod(e.target.value)}
+            >
+              <Space>
+              <Space>
+                      {paymentGateways?.map((gateway) => (
+                        <Radio.Button
+                          key={gateway}
+                          value={gateway}
+                          style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+                        >
+                          <Image
+                            src={getMediaPath(`/media/payment-gateway/${gateway}.png`)}
+                            preview={false}
+                            alt={gateway}
+                            width={80}
+                          />
+                        </Radio.Button>
+                       ))} 
+                    </Space>
+                <Radio.Button value="Paytm">Paytm</Radio.Button>
+              </Space>
+            </Radio.Group>
+          </Col>
+        </Row>
+
+        <Row
+          style={{
+            marginTop: 16,
+            padding: 16,
+            background: "#f5f5f5",
+            borderRadius: 8,
+          }}
+        >
+          <Col span={24}>
+            <Row justify="space-between">
+              <Text>Subtotal</Text>
+              <Text>₹{subtotal.toFixed(2)}</Text>
+            </Row>
+            <Row justify="space-between">
+              <Text>Handling Charge (2%)</Text>
+              <Text>₹{handlingCharge.toFixed(2)}</Text>
+            </Row>
+            <Row justify="space-between" style={{ marginTop: 8 }}>
+              <Title level={5}>Total</Title>
+              <Title level={5}>₹{total.toFixed(2)}</Title>
+            </Row>
+          </Col>
+        </Row>
+
+        <Row justify="end" style={{ marginTop: 16 }}>
+          <Space>
+            <Button>Cancel</Button>
+            <Button type="primary">Pay</Button>
+          </Space>
+        </Row>
       </Modal>
     </>
   );

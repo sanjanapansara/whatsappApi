@@ -385,7 +385,7 @@ const DashBoard = () => {
                       level={5}
                       style={{ textAlign: "justify", margin: 0 }}
                     >
-                      {item.title}345
+                      {item.title}
                     </Title>
                     <Title
                       level={2}
