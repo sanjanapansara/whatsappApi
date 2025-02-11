@@ -89,24 +89,26 @@ const LayoutComponent = (props) => {
             icon: <HomeOutlined />,
             label: t("menu.dashboard"),
         },
-        {
-            name: "License Keys",
-            key: "/license-keys",
-            icon: <KeyOutlined />,
-            label: t("menu.licenseKeys"),
-        },
-        {
-            name: "Trial Keys",
-            key: "/trial-keys",
-            icon: <KeyOutlined />,
-            label: t("menu.trialkeys"),
-        },
-        {
-            name: "Rebranding Setting",
-            key: "/rebranding-setting",
-            icon: <SettingOutlined />,
-            label: t("Rebranding"),
-        },
+
+
+        // {
+        //     name: "License Keys",
+        //     key: "/license-keys",
+        //     icon: <KeyOutlined />,
+        //     label: t("menu.licenseKeys"),
+        // },
+        // {
+        //     name: "Trial Keys",
+        //     key: "/trial-keys",
+        //     icon: <KeyOutlined />,
+        //     label: t("menu.trialkeys"),
+        // },
+        // {
+        //     name: "Rebranding Setting",
+        //     key: "/rebranding-setting",
+        //     icon: <SettingOutlined />,
+        //     label: t("Rebranding"),
+        // },
         {
             name: "Shop",
             key: "/shop",
@@ -114,11 +116,19 @@ const LayoutComponent = (props) => {
             label: t("menu.shop"),
         },
         {
-            name: "Orders",
-            key: "/orders",
-            icon: <ShoppingOutlined />,
-            label: t("menu.Orders"),
-        },
+            key: "/beta-setting",
+            label: "Beta Setting",
+            icon: <SettingOutlined />,
+            details: "See the main indicators",
+          },
+        // {
+        //     name: "Orders",
+        //     key: "/orders",
+        //     icon: <ShoppingOutlined />,
+        //     label: t("menu.Orders"),
+        // },
+
+
         // {
         //     name: "Customer",
         //     key: "/customers",
@@ -143,6 +153,9 @@ const LayoutComponent = (props) => {
         //     icon: <CommentOutlined />,
         //     label: t("menu.feedback"),
         // },
+
+
+
         {
             name: "Privacy Policy",
             key: "/privacy-policy",

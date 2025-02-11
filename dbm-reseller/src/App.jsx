@@ -31,6 +31,7 @@ import WhatsApp from "./component/user/Support/Whatsapp";
 import "./App.css";
 import { getExchangeRates, getPanelDetails, refreshProfile } from "./redux/action";
 import PolicyProLayout from "./component/site/PolicyProLayout";
+import BetaSetting from "./component/site/BetaSetting";
 
 // Protected Route Component
 const ProtectedRoute = ({ component: Component, publicRoute, isAuthenticated, isPolicyRoute = false, ...props }) => {
@@ -141,6 +142,8 @@ const App = ({ isLogin, Panel, loading }) => {
     { path: "/invoice", component: Invoice },
     { path: "/payment-success", component: PaymentSuccess },
     { path: "/payment-failed", component: PaymentFailed },
+    { path: "/beta-setting", component: BetaSetting },
+
     { path: "/session", component: Session },
   ];
 
