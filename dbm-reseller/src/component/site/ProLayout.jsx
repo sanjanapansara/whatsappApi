@@ -109,12 +109,12 @@ const LayoutComponent = (props) => {
         //     icon: <SettingOutlined />,
         //     label: t("Rebranding"),
         // },
-        // {
-        //     name: "Shop",
-        //     key: "/shop",
-        //     icon: <ShoppingOutlined />,
-        //     label: t("menu.shop"),
-        // },
+        {
+            name: "Shop",
+            key: "/shop",
+            icon: <ShoppingOutlined />,
+            label: t("menu.shop"),
+        },
      
           {
             name: "Web Instance",

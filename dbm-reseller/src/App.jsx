@@ -38,6 +38,7 @@ import WebinstanceView from "./component/Webinstances/WebinstanceView";
 import payment from "./component/Webinstances/payment";
 import Webpaymentlist from "./component/Webinstances/Webpaymentlist";
 import Checkout from "./component/Webinstances/Checkout";
+import BuyWebInstance from "./component/Webinstances/BuyWebInstance";
 
 
 
@@ -131,6 +132,7 @@ const App = ({ isLogin, Panel, loading }) => {
     { path: "/payment", component: payment},
     { path: "/webpayment-list", component: Webpaymentlist },
     { path: "/checkout", component: Checkout },
+    { path: "/buy-webinstance", component: BuyWebInstance },
 
 
 
