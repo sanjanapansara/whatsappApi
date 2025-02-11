@@ -127,15 +127,12 @@ const App = ({ isLogin, Panel, loading }) => {
     { path: "/orders", component: Orders },
     { path: "/feedback", component: Feedback },
     { path: "/web-instance", component: WebInstances,  props: { isLogin: isLogin },  },
-    { path: "/webinstance-data", component: Webinstancedata },
+    { path: "/webinstance-data/:id", component: Webinstancedata },
     { path: "/webinstance-view", component: WebinstanceView },
     { path: "/payment", component: payment},
     { path: "/webpayment-list", component: Webpaymentlist },
     { path: "/checkout", component: Checkout },
     { path: "/buy-webinstance", component: BuyWebInstance },
-
-
-
 
     {
       path: "/privacy-policy",

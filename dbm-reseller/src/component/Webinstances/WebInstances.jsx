@@ -101,9 +101,9 @@ const WebInstance = ({ isLogin }) => {
   const currency = useSelector((state) => state?.setting?.currency);
   const panel = useSelector((state) => state?.setting?.panel);
   const navigate = useNavigate();
-  const [plan, setPlan] = useState('1 Month');
+  const [plan, setPlan] = useState("1 Month");
   const [quantity, setQuantity] = useState(1);
-  const [paymentMethod, setPaymentMethod] = useState('Razor Pay');
+  const [paymentMethod, setPaymentMethod] = useState("Razor Pay");
   const pricePerInstance = 1490;
   const handlingChargeRate = 0.02;
   const subtotal = pricePerInstance * quantity;
@@ -192,14 +192,15 @@ const WebInstance = ({ isLogin }) => {
   };
 
   const paymentGateways = useMemo(() => {
-    const currencyData = panel?.currencies?.find((cur) => cur?.code === currency);
+    const currencyData = panel?.currencies?.find(
+      (cur) => cur?.code === currency
+    );
     if (currencyData) {
       return currencyData?.paymentGateways;
     } else {
       return [];
     }
   }, [panel, currency]);
-
 
   useEffect(() => {
     if (paymentGateways.length > 0) {
@@ -660,18 +661,13 @@ const WebInstance = ({ isLogin }) => {
         <Card>
           <Table
             size="small"
-            // scroll={{ x: 1200 }}
             style={{ cursor: "pointer" }}
             dataSource={filteredData}
             columns={columns}
-            pagination={{
-              pageSize: 10,
-            }}
-            scroll={{
-              x: "max-content",
-            }}
-            onRow={() => ({
-              onClick: () => navigate("/webinstance-data"),
+            pagination={{ pageSize: 10 }}
+            scroll={{ x: "max-content" }}
+            onRow={(record) => ({
+              onClick: () => navigate(`/webinstance-data/${record.id}`),
             })}
           />
         </Card>
@@ -931,22 +927,28 @@ const WebInstance = ({ isLogin }) => {
               onChange={(e) => setPaymentMethod(e.target.value)}
             >
               <Space>
-              <Space>
-                      {paymentGateways?.map((gateway) => (
-                        <Radio.Button
-                          key={gateway}
-                          value={gateway}
-                          style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-                        >
-                          <Image
-                            src={getMediaPath(`/media/payment-gateway/${gateway}.png`)}
-                            preview={false}
-                            alt={gateway}
-                            width={80}
-                          />
-                        </Radio.Button>
-                       ))} 
-                    </Space>
+                <Space>
+                  {paymentGateways?.map((gateway) => (
+                    <Radio.Button
+                      key={gateway}
+                      value={gateway}
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Image
+                        src={getMediaPath(
+                          `/media/payment-gateway/${gateway}.png`
+                        )}
+                        preview={false}
+                        alt={gateway}
+                        width={80}
+                      />
+                    </Radio.Button>
+                  ))}
+                </Space>
                 <Radio.Button value="Paytm">Paytm</Radio.Button>
               </Space>
             </Radio.Group>

@@ -34,11 +34,12 @@ import {
   SettingOutlined,
   TransactionOutlined,
 } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
 const WebInstanceData = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [activeKey, setActiveKey] = useState("1");
   const [checked, setChecked] = useState(false);

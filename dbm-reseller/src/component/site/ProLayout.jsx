@@ -91,12 +91,12 @@ const LayoutComponent = (props) => {
         },
 
 
-        {
-            name: "License Keys",
-            key: "/license-keys",
-            icon: <KeyOutlined />,
-            label: t("menu.licenseKeys"),
-        },
+        // {
+        //     name: "License Keys",
+        //     key: "/license-keys",
+        //     icon: <KeyOutlined />,
+        //     label: t("menu.licenseKeys"),
+        // },
         // {
         //     name: "Trial Keys",
         //     key: "/trial-keys",
@@ -109,12 +109,12 @@ const LayoutComponent = (props) => {
         //     icon: <SettingOutlined />,
         //     label: t("Rebranding"),
         // },
-        {
-            name: "Shop",
-            key: "/shop",
-            icon: <ShoppingOutlined />,
-            label: t("menu.shop"),
-        },
+        // {
+        //     name: "Shop",
+        //     key: "/shop",
+        //     icon: <ShoppingOutlined />,
+        //     label: t("menu.shop"),
+        // },
      
           {
             name: "Web Instance",
