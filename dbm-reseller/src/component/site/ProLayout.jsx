@@ -91,12 +91,12 @@ const LayoutComponent = (props) => {
         },
 
 
-        // {
-        //     name: "License Keys",
-        //     key: "/license-keys",
-        //     icon: <KeyOutlined />,
-        //     label: t("menu.licenseKeys"),
-        // },
+        {
+            name: "License Keys",
+            key: "/license-keys",
+            icon: <KeyOutlined />,
+            label: t("menu.licenseKeys"),
+        },
         // {
         //     name: "Trial Keys",
         //     key: "/trial-keys",
@@ -109,25 +109,31 @@ const LayoutComponent = (props) => {
         //     icon: <SettingOutlined />,
         //     label: t("Rebranding"),
         // },
-        {
-            name: "Shop",
-            key: "/shop",
-            icon: <ShoppingOutlined />,
-            label: t("menu.shop"),
+        // {
+        //     name: "Shop",
+        //     key: "/shop",
+        //     icon: <ShoppingOutlined />,
+        //     label: t("menu.shop"),
+        // },
+     
+          {
+            name: "Web Instance",
+            key: "/web-instance",
+            icon: <SafetyCertificateOutlined />,
+            label: t("menu.instance"),
         },
         {
+            name: "Orders",
+            key: "/orders",
+            icon: <ShoppingOutlined />,
+            label: t("menu.Orders"),
+        },
+        {
+            name: "Beta Setting",
             key: "/beta-setting",
-            label: "Beta Setting",
             icon: <SettingOutlined />,
-            details: "See the main indicators",
+            label: t("menu.beta-setting"),
           },
-        // {
-        //     name: "Orders",
-        //     key: "/orders",
-        //     icon: <ShoppingOutlined />,
-        //     label: t("menu.Orders"),
-        // },
-
 
         // {
         //     name: "Customer",

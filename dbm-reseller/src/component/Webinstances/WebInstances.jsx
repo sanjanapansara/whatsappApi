@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Card,
   Table,
@@ -15,7 +15,13 @@ import {
   ConfigProvider,
   Dropdown,
   Menu,
+  Form,
+  Radio,
   Modal,
+  Flex,
+  Badge,
+  Select,
+  DatePicker,
 } from "antd";
 import {
   SearchOutlined,
@@ -30,16 +36,57 @@ import {
   TransactionOutlined,
   FolderOutlined,
   PrinterOutlined,
+  RedoOutlined,
+  FilterOutlined,
+  SortAscendingOutlined,
+  DownloadOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
+import dayjs from "dayjs";
+const { RangePicker } = DatePicker;
+import countryCodes from "country-codes-list";
+
 import { useNavigate } from "react-router-dom";
+import { t } from "i18next";
+import { useDispatch } from "react-redux";
+// import { Search } from "@ant-design/pro-components";
+const { Search, TextArea } = Input;
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 
-const WebInstance = () => {
+const WebInstance = ({ isLogin }) => {
+  const dispatch = useDispatch();
+
+  console.log("isLogin", isLogin);
+  const [formTrial] = Form.useForm(); // Initialize form instance
+
   const navigate = useNavigate();
+  const [countryList, setCountryList] = useState([]);
+
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [isModalOpen3, setIsModalOpen3] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState("create_at");
+  //Filter
+  const [filterType, setFilterType] = useState("all-time"); // Default value is 'specific'
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [country, setCountry] = useState("all");
+  const [status, setStatus] = useState("all");
+  const [renew, setRenew] = useState("all");
+  const [isApplyFilter, setIsApplyFilter] = useState(false);
+  //pagination
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  useEffect(() => {
+    const cList = countryCodes.all();
+    setCountryList(cList);
+  }, [dispatch]);
 
   const showModal2 = () => {
     setIsModalOpen2(true);
@@ -64,6 +111,54 @@ const WebInstance = () => {
   const handleOk3 = () => {
     setIsModalOpen3(false);
   };
+
+  const resetFilterParameters = () => {
+    setSearch("");
+    setIsApplyFilter(false);
+    setSortBy(t("create_at"));
+    setFilterType("all-time");
+    setStartDate(null);
+    setEndDate(null);
+    setCountry(t("all"));
+    setStatus(t("all"));
+    setRenew(t("all"));
+    setPage(1);
+    setPageSize(10);
+    setShowFilterModal(false);
+  };
+
+  const sortByItems = [
+    {
+      key: "1",
+      label: t("sortbyName"),
+      value: "name",
+    },
+    {
+      key: "2",
+      label: t("sortbyEmail"),
+      value: "email",
+    },
+    {
+      key: "3",
+      label: t("sortbyPhoneNumber"),
+      value: "phone",
+    },
+    {
+      key: "4",
+      label: t("sortbyActivate"),
+      value: "active_at",
+    },
+    {
+      key: "5",
+      label: t("sortbyExpireAt"),
+      value: "expire_at",
+    },
+    {
+      key: "6",
+      label: t("sortbyCreateAt"),
+      value: "create_at",
+    },
+  ];
 
   const data2 = [
     {
@@ -119,25 +214,33 @@ const WebInstance = () => {
     length: 100,
   }).map((_, i) => ({
     key: i,
-    name: "01D6D6F43E7BAAE7FBE28190",
-      type: "Pagar.Me",
-      id: "3D9065C1223090EC9BDE0A...",
-      token: "01D6D6F43E7BAAE7FBE28190",
-      status: "Disconnected",
-      dueDate: "-",
-      payment: "Pending",
+    name: "Abc",
+    instancesstatus: "-",
+    sn: i + 1,
+    id: "3D9065C1223090EC9BDE0A...",
+    token: "01D6D6F43E7BAAE7FBE28190",
+    status: "Disconnected",
+    activeat: "20-10-25",
+    expireat: "25-10-25",
   }));
+
+  const isFilterApply = useMemo(() => {
+    // return (
+    //   isApplyFilter &&
+    //   !(
+    //     filterType == "all-time" &&
+    //     country == "all" &&
+    //     status == "all" &&
+    //     renew == "all"
+    //   )
+    // );
+  }, []);
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Type",
-      dataIndex: "type",
-      key: "type",
+      title: "SN",
+      dataIndex: "sn",
+      key: "sn",
     },
     {
       title: "ID",
@@ -150,9 +253,20 @@ const WebInstance = () => {
       ),
     },
     {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+
+    {
       title: "Token",
       dataIndex: "token",
       key: "token",
+      render: (text) => (
+        <Space>
+          {text} <Button type="link" icon={<CopyOutlined />} />
+        </Space>
+      ),
     },
     {
       title: "Status",
@@ -163,18 +277,28 @@ const WebInstance = () => {
       ),
     },
     {
-      title: "Due Date",
-      dataIndex: "dueDate",
-      key: "dueDate",
+      title: "Instances Status",
+      dataIndex: "instancesstatus",
+      key: "instancesstatus",
+      render: (status) => (
+        <Tag color={status === "Connected" ? "green" : "red"}>{status}</Tag>
+      ),
     },
     {
-      title: "Payment",
-      dataIndex: "payment",
-      key: "payment",
+      title: "Active At",
+      dataIndex: "activeat",
+      key: "activeat",
     },
+    {
+      title: "Expire At",
+      dataIndex: "expireat",
+      key: "expireat",
+    },
+
     {
       title: "Actions",
       dataIndex: "actions",
+      fixed: "right",
       key: "actions",
       render: () => (
         <Dropdown overlay={menu2} trigger={["click"]} placement="bottomRight">
@@ -201,8 +325,8 @@ const WebInstance = () => {
               }}
             >
               <Space>
-                <FolderOutlined style={{ fontSize: "18px" }} />
-                Payment
+                <EditOutlined style={{ fontSize: "18px" }} />
+                Edit
               </Space>
             </Text>
           ),
@@ -210,10 +334,10 @@ const WebInstance = () => {
         {
           key: "2",
           label: (
-            <Text disabled>
+            <Text disabled={isLogin === false}>
               <Space>
                 <PrinterOutlined style={{ fontSize: "18px" }} />
-                Print Receipt
+                Log Out
               </Space>
             </Text>
           ),
@@ -221,27 +345,16 @@ const WebInstance = () => {
         {
           key: "3",
           label: (
-            <Text onClick={(e) => {
-              e.stopPropagation();
-              showModal3();
-            }}>
+            <Text
+              disabled={isLogin === true}
+              onClick={(e) => {
+                e.stopPropagation();
+                showModal3();
+              }}
+            >
               <Space>
                 <TransactionOutlined style={{ fontSize: "18px" }} />
-                Migrate instance
-              </Space>
-            </Text>
-          ),
-        },
-        {
-          key: "4",
-          label: (
-            <Text onClick={(e) => {
-              e.stopPropagation();
-              showModal2();
-            }}>
-              <Space>
-                <DeleteOutlined style={{ fontSize: "18px" }} />
-                Delete
+                Log in
               </Space>
             </Text>
           ),
@@ -318,53 +431,175 @@ const WebInstance = () => {
             </Col>
           ))}
         </Row>
+
         <br />
-        <Row align="middle" gutter={[16, 16]}>
-          <Col xs={24} sm={8} md={15}>
-            <Tabs defaultActiveKey="1">
-              <TabPane tab="All" key="1" />
-              <TabPane tab="Connected" key="2" />
-              <TabPane tab="Disconnected" key="3" />
-            </Tabs>
-          </Col>
-          <Col xs={24} sm={8} md={6}>
-            <Input placeholder="Search here..." prefix={<SearchOutlined />} />
-          </Col>
-          <Col xs={24} sm={8} md={2}>
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() => navigate("/webinstanceView")}
+        <Card>
+          <Row gutter={[16, 24]}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={10} xxl={10}>
+              <Flex gap="small" justify="space-evenly">
+                <Button
+                  type={statusFilter == "all" ? "primary" : "default"}
+                  onClick={() => setStatusFilter("all")}
+                  block
+                >
+                  {t("All")}
+                </Button>
+                <Button
+                  type={statusFilter == "connected" ? "primary" : "default"}
+                  onClick={() => setStatusFilter("available")}
+                  block
+                >
+                  {t("Connected")}
+                </Button>
+                <Button
+                  type={statusFilter == "disconnected" ? "primary" : "default"}
+                  onClick={() => setStatusFilter("active")}
+                  block
+                >
+                  {t("Disconnected")}
+                </Button>
+                {/* <Button
+                  type={statusFilter == "expired" ? "primary" : "default"}
+                  // onClick={() => setStatusFilter("expired")}
+                  block
+                >
+                  {t("expired")}
+                </Button>
+                <Button
+                  type={statusFilter == "renew" ? "primary" : "default"}
+                  // onClick={() => setStatusFilter("renew")}
+                  block
+                >
+                  {t("renew")}
+                </Button> */}
+              </Flex>
+            </Col>
+
+            <Col xs={0} sm={0} md={0} lg={0} xl={4} xxl={4}></Col>
+
+            <Col
+              xs={24}
+              sm={24}
+              md={24}
+              lg={24}
+              xl={10}
+              xxl={10}
+              style={{ marginBottom: 10 }}
             >
-              Add
-            </Button>
-          </Col>
-          <Dropdown overlay={menu} trigger={["click"]} placement="bottomRight">
-            <MoreOutlined
-              style={{ fontSize: "25px", cursor: "pointer" }}
-              onClick={(e) => e.preventDefault()}
-            />
-          </Dropdown>
-        </Row>
-        <Row>
-          <Col span={24}>
-            <Table
-              style={{ cursor: "pointer" }}
-              dataSource={dataSource}
-              columns={columns}
-              pagination={{
-                pageSize: 10,
-              }}
-              scroll={{
-                x: "max-content",
-              }}
-              onRow={() => ({
-                onClick: () => navigate("/webinstancedata"),
-              })}
-            />
-          </Col>
-        </Row>
-      
+              <Flex gap="small" justify="space-evenly">
+                <Button
+                  type={statusFilter == "claim trial" ? "primary" : "default"}
+                  onClick={() => setStatusFilter("available")}
+                  block
+                >
+                  {t("Claim trial")}
+                </Button>
+                <Button
+                  type={statusFilter == "add" ? "primary" : "default"}
+                  onClick={() => setStatusFilter("active")}
+                  block
+                >
+                  {t("Add")}
+                </Button>
+                {/* <Button
+                  type={statusFilter == "expired" ? "primary" : "default"}
+                  // onClick={() => setStatusFilter("expired")}
+                  block
+                >
+                  {t("expired")}
+                </Button>
+                <Button
+                  type={statusFilter == "renew" ? "primary" : "default"}
+                  // onClick={() => setStatusFilter("renew")}
+                  block
+                >
+                  {t("renew")}
+                </Button> */}
+              </Flex>
+            </Col>
+          </Row>
+
+          <Row gutter={[16, 24]}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={10} xxl={10}>
+              {/* <Search
+                placeholder={t("search")}
+                enterButton={<SearchOutlined />}
+                onChange={(e) => setSearch(e.target.value)}
+                value={search}
+              // size="small"
+              /> */}
+              {/* <Input placeholder="default size" prefix={<SearchOutlined />} /> */}
+              <Search
+                placeholder={t("search")}
+                onChange={(e) => setSearch(e.target.value)}
+                value={search}
+                enterButton
+                // size="large"
+              />
+            </Col>
+
+            <Col xs={0} sm={0} md={0} lg={0} xl={4} xxl={4}></Col>
+
+            <Col xs={24} sm={24} md={24} lg={24} xl={10} xxl={10}>
+              <Flex align="end" gap="small" justify="space-evenly">
+                <Button
+                  block
+                  onClick={() => {
+                    resetFilterParameters();
+                  }}
+                >
+                  <RedoOutlined /> {t("reset")}
+                </Button>
+                <Badge dot={isFilterApply} color="blue">
+                  <Button
+                    onClick={() => {
+                      setShowFilterModal(true);
+                    }}
+                    block
+                  >
+                    <FilterOutlined /> {t("filter")}
+                  </Button>
+                </Badge>
+
+                <Select
+                  value={sortBy}
+                  optionFilterProp="children"
+                  menuItemSelectedIcon={<SortAscendingOutlined />}
+                  onChange={(value) => setSortBy(value)}
+                  options={sortByItems}
+                  block
+                />
+
+                <Button
+                  type={"primary"}
+                  // onClick={() => onExport()}
+                  block
+                >
+                  <DownloadOutlined /> {t("export")}
+                </Button>
+              </Flex>
+            </Col>
+          </Row>
+        </Card>
+        <br />
+        <Card>
+          <Table
+            size="small"
+            // scroll={{ x: 1200 }}
+            style={{ cursor: "pointer" }}
+            dataSource={dataSource}
+            columns={columns}
+            pagination={{
+              pageSize: 10,
+            }}
+            scroll={{
+              x: "max-content",
+            }}
+            onRow={() => ({
+              onClick: () => navigate("/webinstancedata"),
+            })}
+          />
+        </Card>
       </ConfigProvider>
 
       <Modal
@@ -463,6 +698,98 @@ const WebInstance = () => {
             </Col>
           </Row>
         </Row>
+      </Modal>
+
+      <Modal
+        title={t("filterLicenses")}
+        open={showFilterModal}
+        centered
+        onCancel={() => resetFilterParameters(false)}
+        okText={t("apply")}
+        onOk={() => {
+          setShowFilterModal(false);
+          setIsApplyFilter(true);
+        }}
+      >
+        <Form layout="vertical">
+          <Form.Item>
+            <Radio.Group
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+            >
+              <Radio value={"all-time"}>{t("activities.allTime")}</Radio>
+
+              <Radio value={"specific"}>{t("specificTime")}</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+          {filterType == "specific" && (
+            <Form.Item label={t("filterbyDate")}>
+              <RangePicker
+                maxDate={dayjs()}
+                style={{
+                  width: "100%",
+                }}
+                // onChange={(dates) => {
+                //   const [start, end] = dates;
+                //   setStartDate(start); // Update startDate state
+                //   setEndDate(end); // Update endDate state
+                // }}
+              />
+            </Form.Item>
+          )}
+
+          {/* Country filter */}
+          <Form.Item label={t("filterbyCountry")}>
+            <Select
+              showSearch
+              placeholder={t("select")}
+              value={country}
+              defaultValue={country}
+              onChange={(value) => setCountry(value)}
+              optionFilterProp="children"
+            >
+              <Select.Option key={"all"} value={"all"}>
+                {t("allCountries")}
+              </Select.Option>
+
+              {countryList.map((country, i) => (
+                <Select.Option
+                  key={"country-" + i}
+                  value={country.countryNameEn}
+                >
+                  {country.countryNameEn}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item label={t("filterbyStatus")}>
+            <Select
+              value={status}
+              onChange={(status) => {
+                setStatus(status);
+              }}
+            >
+              <Option value="all">{t("all")}</Option>
+              <Option value="enable">{t("enable")}</Option>
+              <Option value="disable">{t("disable")}</Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item label={t("filterbyRenewal")}>
+            <Select
+              value={renew}
+              // onChange={(renew) => {
+              //   setRenew(renew);
+              // }}
+            >
+              <Option value="all">{t("all")}</Option>
+              <Option value="yes">{t("yes")}</Option>
+              <Option value="no">{t("no")}</Option>
+            </Select>
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   );
