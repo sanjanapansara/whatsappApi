@@ -41,6 +41,8 @@ import {
   SortAscendingOutlined,
   DownloadOutlined,
   EditOutlined,
+  FileProtectOutlined,
+  RightCircleOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
 const { RangePicker } = DatePicker;
@@ -54,6 +56,39 @@ const { Search, TextArea } = Input;
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
+const names = [
+  "John",
+  "Alice",
+  "Emma",
+  "Robert",
+  "Olivia",
+  "Michael",
+  "Sophia",
+  "Daniel",
+  "Emily",
+  "David",
+  "Ella",
+  "James",
+  "Ava",
+  "William",
+  "Mia",
+  "Henry",
+  "Amelia",
+  "Alexander",
+  "Isabella",
+  "Lucas",
+];
+const dataSource = Array.from({ length: 100 }).map((_, i) => ({
+  key: i,
+  name: names[Math.floor(Math.random() * names.length)], // Random name from the list
+  status: i < 20 ? "Active" : "Expire",
+  sn: i + 1,
+  id: "3D9065C1223090EC9BDE0A...",
+  token: "01D6D6F43E7BAAE7FBE28190",
+  instancesstatus: i < 20 ? "Connected" : "Disconnected", // First 20 as "Connected"
+  activeat: "8 Feb 2025, 3:01 PM",
+  expireat: "11 Feb 2025, 3:01 PM",
+}));
 
 const WebInstance = ({ isLogin }) => {
   const dispatch = useDispatch();
@@ -64,6 +99,7 @@ const WebInstance = ({ isLogin }) => {
   const navigate = useNavigate();
   const [countryList, setCountryList] = useState([]);
 
+  const [filteredData, setFilteredData] = useState(dataSource);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [isModalOpen3, setIsModalOpen3] = useState(false);
   const [statusFilter, setStatusFilter] = useState("all");
@@ -82,6 +118,20 @@ const WebInstance = ({ isLogin }) => {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+
+  const handleFilterChange = (status) => {
+    setStatusFilter(status);
+    if (status === "all") {
+      setFilteredData(dataSource);
+    } else {
+      setFilteredData(
+        dataSource.filter(
+          (item) => item.instancesstatus.toLowerCase() === status
+        )
+      );
+    }
+  };
+  console.log("table data-->", dataSource);
 
   useEffect(() => {
     const cList = countryCodes.all();
@@ -210,20 +260,6 @@ const WebInstance = ({ isLogin }) => {
   //   },
   // ];
 
-  const dataSource = Array.from({
-    length: 100,
-  }).map((_, i) => ({
-    key: i,
-    name: "Abc",
-    instancesstatus: "-",
-    sn: i + 1,
-    id: "3D9065C1223090EC9BDE0A...",
-    token: "01D6D6F43E7BAAE7FBE28190",
-    status: "Disconnected",
-    activeat: "20-10-25",
-    expireat: "25-10-25",
-  }));
-
   const isFilterApply = useMemo(() => {
     // return (
     //   isApplyFilter &&
@@ -273,7 +309,7 @@ const WebInstance = ({ isLogin }) => {
       dataIndex: "status",
       key: "status",
       render: (status) => (
-        <Tag color={status === "Connected" ? "green" : "red"}>{status}</Tag>
+        <Tag color={status === "Active" ? "green" : "red"}>{status}</Tag>
       ),
     },
     {
@@ -439,57 +475,49 @@ const WebInstance = ({ isLogin }) => {
               <Flex gap="small" justify="space-evenly">
                 <Button
                   type={statusFilter == "all" ? "primary" : "default"}
-                  onClick={() => setStatusFilter("all")}
+                  onClick={() => {
+                    // setStatusFilter("all"),
+                    handleFilterChange("all");
+                  }}
                   block
                 >
                   {t("All")}
                 </Button>
                 <Button
                   type={statusFilter == "connected" ? "primary" : "default"}
-                  onClick={() => setStatusFilter("available")}
+                  onClick={() => handleFilterChange("connected")}
                   block
                 >
                   {t("Connected")}
                 </Button>
                 <Button
                   type={statusFilter == "disconnected" ? "primary" : "default"}
-                  onClick={() => setStatusFilter("active")}
+                  onClick={() => {
+                    handleFilterChange("disconnected");
+                  }}
                   block
                 >
                   {t("Disconnected")}
                 </Button>
-                {/* <Button
-                  type={statusFilter == "expired" ? "primary" : "default"}
-                  // onClick={() => setStatusFilter("expired")}
-                  block
-                >
-                  {t("expired")}
-                </Button>
-                <Button
-                  type={statusFilter == "renew" ? "primary" : "default"}
-                  // onClick={() => setStatusFilter("renew")}
-                  block
-                >
-                  {t("renew")}
-                </Button> */}
               </Flex>
             </Col>
 
-            <Col xs={0} sm={0} md={0} lg={0} xl={4} xxl={4}></Col>
+            <Col xs={0} sm={0} md={0} lg={0} xl={8} xxl={8}></Col>
 
             <Col
               xs={24}
               sm={24}
               md={24}
               lg={24}
-              xl={10}
-              xxl={10}
+              xl={6}
+              xxl={6}
               style={{ marginBottom: 10 }}
             >
               <Flex gap="small" justify="space-evenly">
                 <Button
                   type={statusFilter == "claim trial" ? "primary" : "default"}
                   onClick={() => setStatusFilter("available")}
+                  icon={<CheckCircleOutlined />}
                   block
                 >
                   {t("Claim trial")}
@@ -498,6 +526,7 @@ const WebInstance = ({ isLogin }) => {
                   type={statusFilter == "add" ? "primary" : "default"}
                   onClick={() => setStatusFilter("active")}
                   block
+                  icon={<PlusOutlined />}
                 >
                   {t("Add")}
                 </Button>
@@ -587,7 +616,7 @@ const WebInstance = ({ isLogin }) => {
             size="small"
             // scroll={{ x: 1200 }}
             style={{ cursor: "pointer" }}
-            dataSource={dataSource}
+            dataSource={filteredData}
             columns={columns}
             pagination={{
               pageSize: 10,

@@ -91,12 +91,12 @@ const LayoutComponent = (props) => {
         },
 
 
-        // {
-        //     name: "License Keys",
-        //     key: "/license-keys",
-        //     icon: <KeyOutlined />,
-        //     label: t("menu.licenseKeys"),
-        // },
+        {
+            name: "License Keys",
+            key: "/license-keys",
+            icon: <KeyOutlined />,
+            label: t("menu.licenseKeys"),
+        },
         // {
         //     name: "Trial Keys",
         //     key: "/trial-keys",

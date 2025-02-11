@@ -322,7 +322,7 @@ const DashBoard = () => {
 
   return (
     <React.Fragment>
-      <Card>
+      {/* <Card> */}
         {/* <Typography.Title style={{ margin: "0px" }} level={5}>
           {t("dashboard.statistics")}
         </Typography.Title>
@@ -421,7 +421,7 @@ const DashBoard = () => {
             </Col>
           ))}
         </Row>
-      </Card>
+      {/* </Card> */}
       <br />
       <Card>
         <Row gutter={[16, 24]}>
