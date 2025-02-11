@@ -1,0 +1,28 @@
+/* .ant-layout  {
+  font-family: Helvetica, Arial, sans-serif !important;
+} */
+/* This will style the main scrollbar of the page */
+
+body{
+  margin: 0% !important;
+}
+
+::-webkit-scrollbar {
+  width: 4px; /* width of the entire scrollbar */
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* color of the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1677ff; /* color of the scroll thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0158d1; /* color when hovering over the scroll thumb */
+}
+.ant-btn-primary {
+  box-shadow: none !important;
+}
