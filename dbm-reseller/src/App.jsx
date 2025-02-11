@@ -32,7 +32,15 @@ import "./App.css";
 import { getExchangeRates, getPanelDetails, refreshProfile } from "./redux/action";
 import PolicyProLayout from "./component/site/PolicyProLayout";
 import BetaSetting from "./component/site/BetaSetting";
-import WebInstances from "./component/Webinstances/WebInstances"
+import WebInstances from "./component/Webinstances/WebInstances";
+import Webinstancedata from "./component/Webinstances/webinstancedata";
+import WebinstanceView from "./component/Webinstances/WebinstanceView";
+import payment from "./component/Webinstances/payment";
+import Webpaymentlist from "./component/Webinstances/Webpaymentlist";
+import Checkout from "./component/Webinstances/Checkout";
+
+
+
 // Protected Route Component
 const ProtectedRoute = ({ component: Component, publicRoute, isAuthenticated, isPolicyRoute = false, ...props }) => {
   if (!isAuthenticated && !publicRoute) {
@@ -118,6 +126,14 @@ const App = ({ isLogin, Panel, loading }) => {
     { path: "/orders", component: Orders },
     { path: "/feedback", component: Feedback },
     { path: "/web-instance", component: WebInstances,  props: { isLogin: isLogin },  },
+    { path: "/webinstance-data", component: Webinstancedata },
+    { path: "/webinstance-view", component: WebinstanceView },
+    { path: "/payment", component: payment},
+    { path: "/webpayment-list", component: Webpaymentlist },
+    { path: "/checkout", component: Checkout },
+
+
+
 
     {
       path: "/privacy-policy",

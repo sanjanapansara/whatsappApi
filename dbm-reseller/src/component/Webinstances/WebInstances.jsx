@@ -321,7 +321,7 @@ const WebInstance = ({ isLogin }) => {
             <Text
               onClick={(e) => {
                 e.stopPropagation(); // Stop row click event
-                navigate("/webpaymentlist");
+                navigate("/webpayment-list");
               }}
             >
               <Space>
@@ -596,7 +596,7 @@ const WebInstance = ({ isLogin }) => {
               x: "max-content",
             }}
             onRow={() => ({
-              onClick: () => navigate("/webinstancedata"),
+              onClick: () => navigate("/webinstance-data"),
             })}
           />
         </Card>
