@@ -25,6 +25,7 @@ import {
   Image,
   message,
   Alert,
+  Divider,
 } from "antd";
 import {
   SearchOutlined,
@@ -56,6 +57,7 @@ import { useNavigate } from "react-router-dom";
 import { t } from "i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { getMediaPath } from "../../lib";
+import axiosInstance from "../../util/axiosInstance";
 
 // import { Search } from "@ant-design/pro-components";
 const { Search, TextArea } = Input;
@@ -407,6 +409,13 @@ const WebInstance = ({ isLogin }) => {
       ),
     },
   ];
+
+  const selectedVariation = selectedProduct
+    ? selectedProduct?.rate?.reseller?.find(
+        (item) =>
+          item?.keys === selectedKeys && item?.valid === selectedValidity
+      )
+    : null;
 
   const menu2 = (
     <Menu
@@ -1006,7 +1015,6 @@ const WebInstance = ({ isLogin }) => {
         cancelText="Cancel"
         centered
         width={500}
-       
       >
         <Title level={4}>Buy Web Instance</Title>
 
@@ -1063,13 +1071,13 @@ const WebInstance = ({ isLogin }) => {
         </Row>
 
         <Row gutter={[8, 8]} style={{ marginTop: 16 }}>
-          <Col span={16}>
+          <Col md={16}>
             <Text strong>Instance Name</Text>
             <Input placeholder="Enter Instance Name" style={{ marginTop: 4 }} />
           </Col>
-          <Col span={8}>
+          <Col md={8}>
             <Text strong>Quantity</Text>
-            <Row justify="center" align="middle" style={{ marginTop: 4 }}>
+            <Row align="middle" style={{ marginTop: 4 }}>
               <Button
                 icon={<MinusOutlined />}
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -1082,7 +1090,7 @@ const WebInstance = ({ isLogin }) => {
             </Row>
           </Col>
         </Row>
-
+        <Divider />
         <Row gutter={[8, 8]} style={{ marginTop: 16 }}>
           <Col span={24}>
             <Text strong>Payment Method</Text>
@@ -1171,12 +1179,14 @@ const WebInstance = ({ isLogin }) => {
               <Text>Subtotal</Text>
               <Text>₹{subtotal.toFixed(2)}</Text>
             </Row>
-            <Row justify="space-between">
+            <Row justify="space-between" style={{marginTop:"10px"}}>
               <Text>Handling Charge (2%)</Text>
               <Text>₹{handlingCharge.toFixed(2)}</Text>
             </Row>
-            <Row justify="space-between" style={{ marginTop: 8 }}>
-              <Title level={5}>Total</Title>
+            <Divider style={{margin:"5px",marginTop:"10px"}} />
+
+            <Row justify="space-between" align="middle">
+              <Title level={5} style={{marginTop:"0px"}}>Total</Title>
               <Title level={5}>₹{total.toFixed(2)}</Title>
             </Row>
           </Col>
