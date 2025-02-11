@@ -371,10 +371,9 @@ const DashBoard = () => {
             >
               <Card
                 style={{
-                  borderRadius: "8px",
-                  backgroundColor: "#fff",
-                  display: "flex",
-                  flexDirection: "column",
+                  // borderRadius: "8px",
+                  // display: "flex",
+                  // flexDirection: "column",
                   width: "100%",
                   boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
                 }}
