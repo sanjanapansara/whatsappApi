@@ -121,6 +121,8 @@ const WebInstance = ({ isLogin }) => {
   const [isModalOpen4, setIsModalOpen4] = useState(false);
 
   const [statusFilter, setStatusFilter] = useState("all");
+  const [paymentFilter, setPaymentFilter] = useState("1month");
+
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("create_at");
   //Filter
@@ -643,7 +645,7 @@ const WebInstance = ({ isLogin }) => {
         <br />
         <Card>
           <Row gutter={[16, 24]}>
-            <Col xs={24} sm={24} md={24} lg={24} xl={10} xxl={10}>
+            <Col xs={12} sm={12} md={12} lg={12} xl={6} xxl={7}>
               <Flex gap="small" justify="space-evenly">
                 <Button
                   type={statusFilter == "all" ? "primary" : "default"}
@@ -677,7 +679,7 @@ const WebInstance = ({ isLogin }) => {
               </Flex>
             </Col>
 
-            <Col xs={0} sm={0} md={0} lg={0} xl={8} xxl={8}></Col>
+            <Col xs={0} sm={0} md={0} lg={0} xl={12} xxl={8}></Col>
 
             <Col
               xs={24}
@@ -728,7 +730,7 @@ const WebInstance = ({ isLogin }) => {
           </Row>
 
           <Row gutter={[16, 24]}>
-            <Col xs={24} sm={24} md={24} lg={24} xl={10} xxl={10}>
+            <Col xs={12} sm={12} md={12} lg={11} xl={6} xxl={7}>
               {/* <Search
                 placeholder={t("search")}
                 enterButton={<SearchOutlined />}
@@ -746,9 +748,9 @@ const WebInstance = ({ isLogin }) => {
               />
             </Col>
 
-            <Col xs={0} sm={0} md={0} lg={0} xl={4} xxl={4}></Col>
+            <Col xs={0} sm={0} md={0} lg={0} xl={9} xxl={4}></Col>
 
-            <Col xs={24} sm={24} md={24} lg={24} xl={10} xxl={10}>
+            <Col xs={12} sm={12} md={12} lg={12} xl={6} xxl={10}>
               <Flex align="end" gap="small" justify="space-evenly">
                 <Button
                   block
@@ -1015,10 +1017,46 @@ const WebInstance = ({ isLogin }) => {
           <Col span={24}>
             <Radio.Group value={plan} onChange={(e) => setPlan(e.target.value)}>
               <Space>
-                <Radio.Button value="1 Month">1 Month</Radio.Button>
-                <Radio.Button value="3 Months">3 Months</Radio.Button>
+              <Button
+                  type={paymentFilter == "1month" ? "primary" : "default"}
+                  onClick={() => {
+                    setPaymentFilter("1month"), handleFilterChange("1month");
+                  }}
+                  block
+                >
+                  1 Month
+                </Button>
+                <Button
+                  type={paymentFilter == "3Month" ? "primary" : "default"}
+                  onClick={() => {
+                    setPaymentFilter("3Month"), handleFilterChange("3Month");
+                  }}
+                  block
+                >
+                  3 Month
+                </Button>
+                <Button
+                  type={paymentFilter == "6Month" ? "primary" : "default"}
+                  onClick={() => {
+                    setPaymentFilter("6Month"), handleFilterChange("6Month");
+                  }}
+                  block
+                >
+                  6 Month
+                </Button>
+                <Button
+                  type={paymentFilter == "1year" ? "primary" : "default"}
+                  onClick={() => {
+                    setPaymentFilter("1year"), handleFilterChange("1year");
+                  }}
+                  block
+                >
+                  1 Year
+                </Button>
+                {/* <Radio.Button value="1 Month"></Radio.Button> */}
+                {/* <Radio.Button value="3 Months">3 Months</Radio.Button>
                 <Radio.Button value="6 Months">6 Months</Radio.Button>
-                <Radio.Button value="1 Year">1 Year</Radio.Button>
+                <Radio.Button value="1 Year">1 Year</Radio.Button> */}
               </Space>
             </Radio.Group>
           </Col>
