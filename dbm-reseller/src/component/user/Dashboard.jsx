@@ -334,9 +334,9 @@ const DashBoard = () => {
                 type={instance === "web" ? "primary" : "default"}
                 onClick={() => setInstance("web")}
                 block
-                style={{
-                  backgroundColor: instance === "web" ? "#00C0A3" : undefined,
-                }}
+                // style={{
+                //   backgroundColor: instance === "web" ? "#00C0A3" : undefined,
+                // }}
               >
                 Web Instance
               </Button>
@@ -344,10 +344,10 @@ const DashBoard = () => {
                 type={instance === "mobile" ? "primary" : "default"}
                 onClick={() => setInstance("mobile")}
                 block
-                style={{
-                  backgroundColor:
-                    instance === "mobile" ? "#00C0A3" : undefined,
-                }}
+                // style={{
+                //   backgroundColor:
+                //     instance === "mobile" ? "#00C0A3" : undefined,
+                // }}
               >
                 Mobile Instance
               </Button>
@@ -386,7 +386,7 @@ const DashBoard = () => {
                       level={5}
                       style={{ textAlign: "justify", margin: 0 }}
                     >
-                      {item.title}
+                      {item.title}345
                     </Title>
                     <Title
                       level={2}
@@ -571,10 +571,10 @@ const DashBoard = () => {
                     type={activeTab === "sent" ? "primary" : "default"}
                     onClick={() => setActiveTab("sent")}
                     block
-                    style={{
-                      backgroundColor:
-                        activeTab === "sent" ? "#00C0A3" : undefined,
-                    }}
+                    // style={{
+                    //   backgroundColor:
+                    //     activeTab === "sent" ? "#00C0A3" : undefined,
+                    // }}
                   >
                     Sent
                   </Button>
@@ -582,10 +582,10 @@ const DashBoard = () => {
                     block
                     type={activeTab === "received" ? "primary" : "default"}
                     onClick={() => setActiveTab("received")}
-                    style={{
-                      backgroundColor:
-                        activeTab === "received" ? "#00C0A3" : undefined,
-                    }}
+                    // style={{
+                    //   backgroundColor:
+                    //     activeTab === "received" ? "#00C0A3" : undefined,
+                    // }}
                   >
                     Received
                   </Button>
