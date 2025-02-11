@@ -32,7 +32,7 @@ import "./App.css";
 import { getExchangeRates, getPanelDetails, refreshProfile } from "./redux/action";
 import PolicyProLayout from "./component/site/PolicyProLayout";
 import BetaSetting from "./component/site/BetaSetting";
-
+import WebInstances from "./component/Webinstances/WebInstances"
 // Protected Route Component
 const ProtectedRoute = ({ component: Component, publicRoute, isAuthenticated, isPolicyRoute = false, ...props }) => {
   if (!isAuthenticated && !publicRoute) {
@@ -117,6 +117,8 @@ const App = ({ isLogin, Panel, loading }) => {
     { path: "/activities", component: Activities },
     { path: "/orders", component: Orders },
     { path: "/feedback", component: Feedback },
+    { path: "/web-instance", component: WebInstances,  props: { isLogin: isLogin },  },
+
     {
       path: "/privacy-policy",
       component: PolicyPage,
@@ -143,7 +145,6 @@ const App = ({ isLogin, Panel, loading }) => {
     { path: "/payment-success", component: PaymentSuccess },
     { path: "/payment-failed", component: PaymentFailed },
     { path: "/beta-setting", component: BetaSetting },
-
     { path: "/session", component: Session },
   ];
 
